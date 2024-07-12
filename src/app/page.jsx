@@ -1,32 +1,28 @@
 "use client";
-import {
-  DollarSign,
-  Maximize,
-  MapPin,
-  TrendingUp,
-  Users,
-  Sliders,
-} from "lucide-react";
+import React, { useEffect, useState } from "react";
+
 import { motion } from "framer-motion";
+
+// Import icons
 import {
   Button,
   Card,
   CardContent,
-  CardHeader,
   Dialog,
   DialogContent,
-  DialogTitle,
   Input,
   Slider,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { DollarSign, MapPin, Maximize, TrendingUp, Users } from "lucide-react";
+
+// ... (keep the existing data generation functions)
 
 const PropertyCard = ({
   property,
   onAddToCollection,
   isInCollection,
   onClick,
-}: any) => (
+}) => (
   <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
     <Card
       className="w-full max-w-sm cursor-pointer bg-gradient-to-br from-blue-50 to-white shadow-lg hover:shadow-xl transition-all duration-300"
@@ -37,9 +33,9 @@ const PropertyCard = ({
         alt={property.name}
         className="w-full h-48 object-cover rounded-t-lg"
       />
-      <CardHeader>
+      <>
         <h1 className="text-blue-600">{property.name}</h1>
-      </CardHeader>
+      </>
       <CardContent className="space-y-2">
         <div className="flex items-center">
           <DollarSign className="w-5 h-5 text-blue-500 mr-2" />
@@ -58,7 +54,7 @@ const PropertyCard = ({
           <p>ROI: {property.roi}%</p>
         </div>
       </CardContent>
-      <CardContent>
+      <>
         <Button
           className="w-full bg-blue-500 hover:bg-blue-600 transition-colors duration-300"
           onClick={(e) => {
@@ -69,17 +65,19 @@ const PropertyCard = ({
         >
           {isInCollection ? "Added to Collection" : "Add to Collection"}
         </Button>
-      </CardContent>
+      </>
     </Card>
   </motion.div>
 );
 
-const PropertyDetails = ({ property, onClose }: any) => (
-  <Dialog open={true} onClose={onClose}>
+const PropertyDetails = ({ property, onClose }) => (
+  <Dialog open={true} onChange={onClose}>
     <DialogContent className="max-w-4xl bg-gradient-to-br from-blue-50 to-white">
-      <DialogTitle className="text-2xl text-blue-600">
-        {property.name} - Financial Details
-      </DialogTitle>
+      <>
+        <h1 className="text-2xl text-blue-600">
+          {property.name} - Financial Details
+        </h1>
+      </>
       <div className="grid gap-6">
         <div>
           <h3 className="text-lg font-semibold text-blue-500">Payment Plan</h3>
@@ -90,14 +88,12 @@ const PropertyDetails = ({ property, onClose }: any) => (
           <div className="grid grid-cols-2 gap-2 bg-white p-4 rounded-lg shadow">
             <div className="font-bold text-blue-600">Installment</div>
             <div className="font-bold text-blue-600">Due Date</div>
-            {property.paymentPlan.installments.map(
-              (installment: any, index: number) => (
-                <React.Fragment key={index}>
-                  <div>AED {installment.amount.toLocaleString()}</div>
-                  <div>{installment.dueDate}</div>
-                </React.Fragment>
-              )
-            )}
+            {property.paymentPlan.installments.map((installment, index) => (
+              <React.Fragment key={index}>
+                <div>AED {installment.amount.toLocaleString()}</div>
+                <div>{installment.dueDate}</div>
+              </React.Fragment>
+            ))}
           </div>
         </div>
         <div>
@@ -108,15 +104,13 @@ const PropertyDetails = ({ property, onClose }: any) => (
             <div className="font-bold text-blue-600">Year</div>
             <div className="font-bold text-blue-600">Property Value</div>
             <div className="font-bold text-blue-600">Rental Income</div>
-            {property.financialProjections.map(
-              (projection: any, index: number) => (
-                <React.Fragment key={index}>
-                  <div>{projection.year}</div>
-                  <div>AED {projection.propertyValue.toLocaleString()}</div>
-                  <div>AED {projection.rentalIncome.toLocaleString()}</div>
-                </React.Fragment>
-              )
-            )}
+            {property.financialProjections.map((projection, index) => (
+              <React.Fragment key={index}>
+                <div>{projection.year}</div>
+                <div>AED {projection.propertyValue.toLocaleString()}</div>
+                <div>AED {projection.rentalIncome.toLocaleString()}</div>
+              </React.Fragment>
+            ))}
           </div>
         </div>
       </div>
@@ -124,14 +118,14 @@ const PropertyDetails = ({ property, onClose }: any) => (
   </Dialog>
 );
 
-const AgentSelection = ({ agents, onSelectAgent, onClose }: any) => (
-  <Dialog open={true} onClose={onClose}>
+const AgentSelection = ({ agents, onSelectAgent, onClose }) => (
+  <Dialog open={true} onChange={onClose}>
     <DialogContent className="max-w-4xl bg-gradient-to-br from-blue-50 to-white">
-      <DialogTitle className="text-2xl text-blue-600">
-        Select an Agent
-      </DialogTitle>
+      <>
+        <h1 className="text-2xl text-blue-600">Select an Agent</h1>
+      </>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {agents.map((agent: any) => (
+        {agents.map((agent) => (
           <motion.div
             key={agent.id}
             whileHover={{ scale: 1.05 }}
@@ -146,9 +140,9 @@ const AgentSelection = ({ agents, onSelectAgent, onClose }: any) => (
                 alt={agent.name}
                 className="w-full h-32 object-cover rounded-t-lg"
               />
-              <CardHeader>
+              <>
                 <h1 className="text-blue-600">{agent.name}</h1>
-              </CardHeader>
+              </>
               <CardContent>
                 <p className="flex items-center">
                   <Users className="w-4 h-4 mr-2 text-blue-500" />
@@ -171,19 +165,18 @@ const PropertyMatchingApp = () => {
   const [budget, setBudget] = useState(5000000);
   const [size, setSize] = useState(100);
   const [location, setLocation] = useState("");
-  const [matches, setMatches] = useState<any[]>([]);
-  const [collection, setCollection] = useState<any[]>([]);
+  const [matches, setMatches] = useState([]);
+  const [collection, setCollection] = useState([]);
   const [selectedProperty, setSelectedProperty] = useState(null);
   const [showAgentSelection, setShowAgentSelection] = useState(false);
-  const [agents, setAgents] = useState<any[]>([]);
-  const [selectedAgent, setSelectedAgent] = useState<any>(null);
+  const [agents, setAgents] = useState([]);
+  const [selectedAgent, setSelectedAgent] = useState(null);
   const [showContactForm, setShowContactForm] = useState(false);
   const [contactDetails, setContactDetails] = useState({
     name: "",
     email: "",
     phone: "",
   });
-
   useEffect(() => {
     // Fetch initial data for properties and agents
     // This is just a placeholder. Replace with actual data fetching logic.
@@ -225,15 +218,15 @@ const PropertyMatchingApp = () => {
     // Update the matches state based on user preferences
   };
 
-  const handleAddToCollection = (property: any) => {
+  const handleAddToCollection = (property) => {
     setCollection([...collection, property]);
   };
 
-  const handleRemoveFromCollection = (propertyId: any) => {
-    setCollection(collection.filter((p: any) => p.id !== propertyId));
+  const handleRemoveFromCollection = (propertyId) => {
+    setCollection(collection.filter((p) => p.id !== propertyId));
   };
 
-  const handlePropertyClick = (property: any) => {
+  const handlePropertyClick = (property) => {
     setSelectedProperty(property);
   };
 
@@ -241,7 +234,7 @@ const PropertyMatchingApp = () => {
     setShowAgentSelection(true);
   };
 
-  const handleSelectAgent = (agent: any) => {
+  const handleSelectAgent = (agent) => {
     setSelectedAgent(agent);
     setShowAgentSelection(false);
     setShowContactForm(true);
@@ -263,39 +256,40 @@ const PropertyMatchingApp = () => {
         AI Property Matcher
       </h1>
 
+      {/* Preferences Card */}
       <Card className="mb-8 shadow-lg">
-        <CardHeader>
+        <>
           <h1 className="text-2xl text-blue-600">Your Preferences</h1>
-        </CardHeader>
+        </>
         <CardContent className="space-y-6">
           <div>
-            <h1 className="block mb-2 text-blue-600">
+            <p className="block mb-2 text-blue-600">
               Budget (AED): {budget.toLocaleString()}
-            </h1>
+            </p>
             <Slider
               min={1000000}
               max={10000000}
               step={100000}
-              value={budget}
-              onChange={(e, value: any) => setBudget(value)}
+              value={[budget]}
+              onValueChange={(value) => setBudget(value[0])}
               className="text-blue-500"
             />
           </div>
           <div>
-            <h1 className="block mb-2 text-blue-600">
+            <p className="block mb-2 text-blue-600">
               Minimum Size (sqm): {size}
-            </h1>
+            </p>
             <Slider
               min={50}
               max={500}
               step={10}
-              value={size}
-              onChange={(e, value: any) => setSize(value)}
+              value={[size]}
+              onValueChange={(value) => setSize(value[0])}
               className="text-blue-500"
             />
           </div>
           <div>
-            <h1 className="block mb-2 text-blue-600">Preferred Location:</h1>
+            <p className="block mb-2 text-blue-600">Preferred Location:</p>
             <Input
               type="text"
               value={location}
@@ -313,10 +307,11 @@ const PropertyMatchingApp = () => {
         </CardContent>
       </Card>
 
+      {/* Matched Properties */}
       <Card className="mb-8 shadow-lg">
-        <CardHeader>
+        <>
           <h1 className="text-2xl text-blue-600">Matched Properties</h1>
-        </CardHeader>
+        </>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {matches.map((property) => (
@@ -324,9 +319,7 @@ const PropertyMatchingApp = () => {
                 key={property.id}
                 property={property}
                 onAddToCollection={handleAddToCollection}
-                isInCollection={collection.some(
-                  (p: any) => p.id === property.id
-                )}
+                isInCollection={collection.some((p) => p.id === property.id)}
                 onClick={handlePropertyClick}
               />
             ))}
@@ -339,12 +332,13 @@ const PropertyMatchingApp = () => {
         </CardContent>
       </Card>
 
+      {/* Collection */}
       <Card className="mb-8 shadow-lg">
-        <CardHeader>
+        <>
           <h1 className="text-2xl text-blue-600">Your Collection</h1>
-        </CardHeader>
+        </>
         <CardContent>
-          {collection.map((property: any) => (
+          {collection.map((property) => (
             <div
               key={property.id}
               className="flex justify-between items-center mb-4 p-4 bg-white rounded-lg shadow"
@@ -353,7 +347,7 @@ const PropertyMatchingApp = () => {
                 {property.name} - AED {property.price.toLocaleString()}
               </span>
               <Button
-                // variant="destructive"
+                variant="destructive"
                 onClick={() => handleRemoveFromCollection(property.id)}
                 className="bg-red-500 hover:bg-red-600 transition-colors duration-300"
               >
@@ -367,13 +361,15 @@ const PropertyMatchingApp = () => {
             </p>
           )}
         </CardContent>
-        <Button
-          onClick={handleAgentSelection}
-          disabled={collection.length === 0}
-          className="w-full bg-blue-500 hover:bg-blue-600 transition-colors duration-300"
-        >
-          Match with Real Estate Agents
-        </Button>
+        <>
+          <Button
+            onClick={handleAgentSelection}
+            disabled={collection.length === 0}
+            className="w-full bg-blue-500 hover:bg-blue-600 transition-colors duration-300"
+          >
+            Match with Real Estate Agents
+          </Button>
+        </>
       </Card>
 
       {selectedProperty && (
@@ -391,16 +387,19 @@ const PropertyMatchingApp = () => {
         />
       )}
 
-      <Dialog open={showContactForm} onClose={() => setShowContactForm(false)}>
+      {/* Contact Form Dialog */}
+      <Dialog open={showContactForm} onChange={setShowContactForm}>
         <DialogContent className="bg-gradient-to-br from-blue-50 to-white">
-          <h1>
-            <DialogTitle className="text-2xl text-blue-600">
+          <>
+            <h1 className="text-2xl text-blue-600">
               Contact {selectedAgent?.name}
-            </DialogTitle>
-          </h1>
+            </h1>
+          </>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
-              <h1 className="text-right text-blue-600">Name</h1>
+              <p htmlFor="name" className="text-right text-blue-600">
+                Name
+              </p>
               <Input
                 id="name"
                 value={contactDetails.name}
@@ -411,7 +410,9 @@ const PropertyMatchingApp = () => {
               />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <h1 className="text-right text-blue-600">Email</h1>
+              <p htmlFor="email" className="text-right text-blue-600">
+                Email
+              </p>
               <Input
                 id="email"
                 type="email"
@@ -426,7 +427,9 @@ const PropertyMatchingApp = () => {
               />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <h1 className="text-right text-blue-600">Phone</h1>
+              <p htmlFor="phone" className="text-right text-blue-600">
+                Phone
+              </p>
               <Input
                 id="phone"
                 type="tel"
@@ -441,12 +444,14 @@ const PropertyMatchingApp = () => {
               />
             </div>
           </div>
-          <Button
-            onClick={handleSubmitContactDetails}
-            className="bg-blue-500 hover:bg-blue-600 transition-colors duration-300"
-          >
-            Submit
-          </Button>
+          <>
+            <Button
+              onClick={handleSubmitContactDetails}
+              className="bg-blue-500 hover:bg-blue-600 transition-colors duration-300"
+            >
+              Submit
+            </Button>
+          </>
         </DialogContent>
       </Dialog>
     </div>
