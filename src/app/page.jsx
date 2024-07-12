@@ -214,8 +214,64 @@ const PropertyMatchingApp = () => {
   }, []);
 
   const handleMatch = () => {
-    // Placeholder for matching logic
-    // Update the matches state based on user preferences
+    // Example properties data (replace with actual data fetching logic)
+    const allProperties = [
+      {
+        id: 1,
+        name: "Luxury Villa",
+        image: "https://via.placeholder.com/150",
+        price: 4500000,
+        size: 250,
+        location: "Dubai",
+        roi: 8,
+        paymentPlan: {
+          downPayment: 450000,
+          installments: [
+            { amount: 50000, dueDate: "2023-08-01" },
+            { amount: 50000, dueDate: "2023-09-01" },
+          ],
+        },
+        financialProjections: [
+          { year: 2023, propertyValue: 5000000, rentalIncome: 400000 },
+          { year: 2024, propertyValue: 5200000, rentalIncome: 410000 },
+        ],
+      },
+      {
+        id: 2,
+        name: "Modern Apartment",
+        image: "https://via.placeholder.com/150",
+        price: 3000000,
+        size: 150,
+        location: "Abu Dhabi",
+        roi: 6,
+        paymentPlan: {
+          downPayment: 300000,
+          installments: [
+            { amount: 40000, dueDate: "2023-08-01" },
+            { amount: 40000, dueDate: "2023-09-01" },
+          ],
+        },
+        financialProjections: [
+          { year: 2023, propertyValue: 3200000, rentalIncome: 300000 },
+          { year: 2024, propertyValue: 3400000, rentalIncome: 310000 },
+        ],
+      },
+      // Add more properties as needed
+    ];
+
+    // Filter properties based on user's preferences
+    const matchedProperties = allProperties.filter((property) => {
+      const isWithinBudget = property.price <= budget;
+      const isWithinSize = property.size >= size;
+      const isMatchingLocation = property.location
+        .toLowerCase()
+        .includes(location.toLowerCase());
+
+      return isWithinBudget && isWithinSize && isMatchingLocation;
+    });
+
+    // Update the matches state
+    setMatches(matchedProperties);
   };
 
   const handleAddToCollection = (property) => {
